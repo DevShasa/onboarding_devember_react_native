@@ -5,6 +5,7 @@ import {
   AmaticSC_400Regular,
   AmaticSC_700Bold,
 } from '@expo-google-fonts/amatic-sc';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import * as SplashScreen from 'expo-splash-screen';
 
@@ -30,8 +31,11 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack screenOptions={{}}>
-      <Stack.Screen name="index" options={{ title: 'DEVember' }} />
-    </Stack>
+    <GestureHandlerRootView style={{flex:1}}>
+      <Stack screenOptions={{}}>
+        <Stack.Screen name="index" options={{ title: 'DEVember' }} />
+      </Stack>
+    </GestureHandlerRootView>
+
   );
 }

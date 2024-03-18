@@ -3,6 +3,7 @@ import {useState} from "react";
 import { Stack, router } from "expo-router";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
+import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
 
 
 const onboardingSteps = [
@@ -23,6 +24,8 @@ const onboardingSteps = [
 	},
 ];
 
+
+
 const Onboarding = () => {
 
     const [screenIndex, setScreenIndex] = useState(0)
@@ -37,10 +40,37 @@ const Onboarding = () => {
         })
     }
 
+    const onBack = ()=>{
+        setScreenIndex(prev =>{
+            if(prev === 0){
+                // GO TO THE BEGINNING ?
+                return onboardingSteps.length -1
+            }
+            return prev - 1
+        })
+    }
+
+
     const endOnboarding = ()=>{
         setScreenIndex(0),
         router.back()
     }
+
+    const swipeForward = Gesture.Fling()
+            .direction(Directions.LEFT)
+            .onEnd((event)=>{
+                console.log("FLING LEFT --->", event)
+                onContinue()}
+            )
+    const swipeBack = Gesture.Fling()
+            .direction(Directions.RIGHT)
+            .onEnd((event)=>{
+                console.log("FLING RIGHT --->", event)
+                onBack()
+            })
+
+    const swipes = Gesture.Simultaneous(swipeForward, swipeBack)
+
 
 	return (
 		<SafeAreaView style={styles.page}>
@@ -54,24 +84,27 @@ const Onboarding = () => {
                         )
                     })}
                 </View>
-            <View style={styles.pageContent}>
-                <FontAwesome5 
-                    name={data.iconName}
-                    size={100} 
-                    color="#CEF202" 
-                    style={styles.image}
-                />
-                <View style={styles.footer}>
-                    <Text style={styles.title}>{data.title}</Text>
-                    <Text style={styles.description}>{data.description}</Text>
-                    <View style={styles.buttonsRow}>
-                        <Text style={styles.buttonText} onPress={endOnboarding}>Skip</Text>
-                        <Pressable style={styles.button} onPress={onContinue}>
-                            <Text style={styles.buttonText}>Continue</Text>
-                        </Pressable>
+            <GestureDetector gesture={swipes}>
+                <View style={styles.pageContent}>
+                    <FontAwesome5 
+                        name={data.iconName}
+                        size={100} 
+                        color="#CEF202" 
+                        style={styles.image}
+                    />
+                    <View style={styles.footer}>
+                        <Text style={styles.title}>{data.title}</Text>
+                        <Text style={styles.description}>{data.description}</Text>
+                        <View style={styles.buttonsRow}>
+                            <Text style={styles.buttonText} onPress={endOnboarding}>Skip</Text>
+                            <Pressable style={styles.button} onPress={onContinue}>
+                                <Text style={styles.buttonText}>Continue</Text>
+                            </Pressable>
+                        </View>
                     </View>
                 </View>
-            </View>
+            </GestureDetector>
+
 		</SafeAreaView>
 	);
 };
