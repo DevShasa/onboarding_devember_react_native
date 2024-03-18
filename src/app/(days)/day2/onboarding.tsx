@@ -39,16 +39,10 @@ const onboardingSteps = [
 
 const Onboarding = () => {
 	const [screenIndex, setScreenIndex] = useState(0);
-	const [index2, setIndex2] = useState<string | number>(30);
-	const [index3, setIndex3] = useState<string | number>(498);
+
 
 	const data = onboardingSteps[screenIndex];
 	const router = useRouter();
-
-	useEffect(() => {
-		setIndex2(screenIndex + "k");
-		setIndex3(screenIndex + "j");
-	}, [screenIndex]);
 
 	const onContinue = () => {
 		setScreenIndex((prev) => {
@@ -113,12 +107,11 @@ const Onboarding = () => {
 				<View
 					//entering={BounceInRight}
 					style={styles.pageContent}
-					//key={screenIndex}
+					key={screenIndex}
 				>
 					<Animated.View
 						entering={FadeIn}
 						exiting={FadeOut}
-						key={index3}
 					>
 						<FontAwesome5
 							name={data?.iconName}
@@ -130,7 +123,6 @@ const Onboarding = () => {
 
 					<View style={styles.footer}>
 						<Animated.Text
-							key={screenIndex}
 							entering={SlideInRight}
 							style={styles.title}
                             exiting={SlideOutLeft}
@@ -138,18 +130,14 @@ const Onboarding = () => {
 							{data?.title}
 						</Animated.Text>
 						<Animated.Text
-							key={index2}
 							entering={SlideInRight.delay(100)}  
 							style={styles.description}
                             exiting={SlideOutLeft.delay(100)}
-
 						>
 							{data?.description}
 						</Animated.Text>
 						<View style={styles.buttonsRow}>
-							<Text style={styles.buttonText} onPress={endOnboarding} >
-								Skip
-							</Text>
+							<Text style={styles.buttonText} onPress={endOnboarding} > Skip </Text>
 							<Pressable style={styles.button} onPress={onContinue} >
 								<Text style={styles.buttonText}>Continue</Text>
 							</Pressable>
