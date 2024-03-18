@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, SafeAreaView, Pressable } from "react-native";
 import {useState} from "react";
-import { Stack, router } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
-
+// import Animated, {FadeIn,FadeOut} from "react-native-reanimated"
 
 const onboardingSteps = [
 	{
@@ -30,7 +30,8 @@ const Onboarding = () => {
 
     const [screenIndex, setScreenIndex] = useState(0)
     const data = onboardingSteps[screenIndex]
-
+    const router = useRouter()
+    
     const onContinue = ()=>{
         setScreenIndex(prev =>{
             if(prev === onboardingSteps.length -1){
@@ -53,18 +54,20 @@ const Onboarding = () => {
 
     const endOnboarding = ()=>{
         setScreenIndex(0),
-        router.back()
+        router.replace("/(days)/day2")
     }
 
     const swipeForward = Gesture.Fling()
+            .runOnJS(true)
             .direction(Directions.LEFT)
-            .onEnd((event)=>{
+            .onStart((event)=>{
                 console.log("FLING LEFT --->", event)
-                onContinue()}
-            )
+                onContinue()
+            })
     const swipeBack = Gesture.Fling()
+            .runOnJS(true)
             .direction(Directions.RIGHT)
-            .onEnd((event)=>{
+            .onStart((event)=>{
                 console.log("FLING RIGHT --->", event)
                 onBack()
             })
